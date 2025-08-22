@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoreWise AI - Inventory Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🏪</span>
+                    <span class="logo-text">StoreWise AI</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            
+            <div class="sidebar-menu">
+                <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="#inventory" class="menu-item" data-section="inventory">
+                    <span class="menu-icon">📦</span>
+                    <span class="menu-text">Inventory</span>
+                </a>
+                <a href="#sales" class="menu-item" data-section="sales">
+                    <span class="menu-icon">💳</span>
+                    <span class="menu-text">Sales & POS</span>
+                </a>
+                <a href="#analytics" class="menu-item" data-section="analytics">
+                    <span class="menu-icon">📈</span>
+                    <span class="menu-text">Analytics</span>
+                </a>
+                <a href="#suppliers" class="menu-item" data-section="suppliers">
+                    <span class="menu-icon">🚚</span>
+                    <span class="menu-text">Suppliers</span>
+                </a>
+                <a href="#settings" class="menu-item" data-section="settings">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-text">Settings</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="store-info">
+                    <div class="store-name">Sunny Corner Market</div>
+                    <div class="store-status">Online</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="quick-actions">
+                        <button class="btn btn--outline btn--sm" id="quickSaleBtn">Quick Sale</button>
+                        <button class="btn btn--primary btn--sm" id="addProductBtn">Add Product</button>
+                    </div>
+                    <div class="user-menu">
+                        <span class="user-name">Store Owner</span>
+                        <div class="user-avatar">👤</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section class="content-section active" id="dashboard">
+                <div class="dashboard-grid">
+                    <!-- Key Metrics Cards -->
+                    <div class="metrics-row">
+                        <div class="metric-card">
+                            <div class="metric-icon">💰</div>
+                            <div class="metric-content">
+                                <div class="metric-value" id="totalValue">$2,847.32</div>
+                                <div class="metric-label">Total Inventory Value</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📦</div>
+                            <div class="metric-content">
+                                <div class="metric-value" id="totalProducts">91</div>
+                                <div class="metric-label">Total Products</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">⚠️</div>
+                            <div class="metric-content">
+                                <div class="metric-value" id="lowStockCount">3</div>
+                                <div class="metric-label">Low Stock Alerts</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📈</div>
+                            <div class="metric-content">
+                                <div class="metric-value" id="todaySales">$127.85</div>
+                                <div class="metric-label">Today's Sales</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts and Alerts -->
+                    <div class="dashboard-content">
+                        <div class="chart-section">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Sales Overview</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="chart-container" style="position: relative; height: 300px;">
+                                        <canvas id="salesChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alerts-section">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Stock Alerts</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="alert-list" id="alertList">
+                                        <!-- Alerts will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Recent Activity</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="activity-list" id="activityList">
+                                    <!-- Activity will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory Section -->
+            <section class="content-section" id="inventory">
+                <div class="inventory-header">
+                    <div class="inventory-controls">
+                        <div class="search-filter">
+                            <input type="text" class="form-control" placeholder="Search products..." id="productSearch">
+                            <select class="form-control" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <!-- Categories will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="inventory-actions">
+                            <button class="btn btn--outline" id="importDataBtn">Import Data</button>
+                            <button class="btn btn--outline" id="exportDataBtn">Export Data</button>
+                            <button class="btn btn--primary" id="addNewProductBtn">Add Product</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inventory-grid" id="inventoryGrid">
+                    <!-- Product cards will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Sales & POS Section -->
+            <section class="content-section" id="sales">
+                <div class="pos-layout">
+                    <div class="pos-left">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Point of Sale</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="product-search">
+                                    <input type="text" class="form-control" placeholder="Scan barcode or search product..." id="posSearch">
+                                </div>
+                                
+                                <div class="cart-items" id="cartItems">
+                                    <div class="empty-cart">
+                                        <p>Scan or search products to add to cart</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="cart-total">
+                                    <div class="total-row">
+                                        <span>Subtotal:</span>
+                                        <span id="cartSubtotal">$0.00</span>
+                                    </div>
+                                    <div class="total-row">
+                                        <span>Tax (8.75%):</span>
+                                        <span id="cartTax">$0.00</span>
+                                    </div>
+                                    <div class="total-row final-total">
+                                        <span>Total:</span>
+                                        <span id="cartTotal">$0.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="checkout-actions">
+                                    <button class="btn btn--outline btn--full-width" id="clearCartBtn">Clear Cart</button>
+                                    <button class="btn btn--primary btn--full-width" id="checkoutBtn" disabled>Process Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pos-right">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Recent Transactions</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="transaction-list" id="transactionList">
+                                    <!-- Transactions will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section class="content-section" id="analytics">
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Sales Trends</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="trendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Top Products</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="topProductsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Performance Metrics</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="performance-metrics">
+                                    <div class="performance-item">
+                                        <span class="performance-label">Gross Margin</span>
+                                        <span class="performance-value">34.2%</span>
+                                    </div>
+                                    <div class="performance-item">
+                                        <span class="performance-label">Inventory Turnover</span>
+                                        <span class="performance-value">8.3x</span>
+                                    </div>
+                                    <div class="performance-item">
+                                        <span class="performance-label">Avg. Transaction</span>
+                                        <span class="performance-value">$11.42</span>
+                                    </div>
+                                    <div class="performance-item">
+                                        <span class="performance-label">Stock Accuracy</span>
+                                        <span class="performance-value">96.7%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Suppliers Section -->
+            <section class="content-section" id="suppliers">
+                <div class="suppliers-header">
+                    <h2>Supplier Management</h2>
+                    <button class="btn btn--primary" id="addSupplierBtn">Add Supplier</button>
+                </div>
+                
+                <div class="suppliers-grid" id="suppliersGrid">
+                    <!-- Supplier cards will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="content-section" id="settings">
+                <div class="settings-layout">
+                    <div class="settings-nav">
+                        <div class="settings-nav-item active" data-settings="store">Store Settings</div>
+                        <div class="settings-nav-item" data-settings="inventory">Inventory Settings</div>
+                        <div class="settings-nav-item" data-settings="alerts">Alert Settings</div>
+                        <div class="settings-nav-item" data-settings="backup">Backup & Export</div>
+                    </div>
+                    
+                    <div class="settings-content">
+                        <div class="settings-panel active" id="storeSettings">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Store Information</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="form-group">
+                                        <label class="form-label">Store Name</label>
+                                        <input type="text" class="form-control" value="Sunny Corner Market">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control">123 Main Street, Anytown, CA 94102</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" value="555-0100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Tax Rate (%)</label>
+                                        <input type="number" class="form-control" value="8.75" step="0.01">
+                                    </div>
+                                    <button class="btn btn--primary">Save Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="inventorySettings">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Inventory Preferences</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="form-group">
+                                        <label class="form-label">Default Low Stock Threshold</label>
+                                        <input type="number" class="form-control" value="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Auto-reorder Enabled</label>
+                                        <input type="checkbox" checked>
+                                    </div>
+                                    <button class="btn btn--primary">Save Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="alertSettings">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Alert Preferences</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="form-group">
+                                        <label class="form-label">Email Notifications</label>
+                                        <input type="checkbox" checked>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Low Stock Alerts</label>
+                                        <input type="checkbox" checked>
+                                    </div>
+                                    <button class="btn btn--primary">Save Preferences</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-panel" id="backupSettings">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>Data Management</h3>
+                                </div>
+                                <div class="card__body">
+                                    <div class="backup-actions">
+                                        <button class="btn btn--outline btn--full-width mb-8">Export All Data</button>
+                                        <button class="btn btn--outline btn--full-width mb-8">Import Data</button>
+                                        <button class="btn btn--secondary btn--full-width">Reset All Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal hidden" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Add New Product</h3>
+                <button class="modal-close" id="closeProductModal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" id="productCategory" required>
+                            <!-- Categories populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Barcode</label>
+                        <input type="text" class="form-control" id="productBarcode">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price ($)</label>
+                        <input type="number" class="form-control" id="productPrice" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cost ($)</label>
+                        <input type="number" class="form-control" id="productCost" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" class="form-control" id="productStock" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Minimum Stock</label>
+                        <input type="number" class="form-control" id="productMinStock" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Supplier</label>
+                        <select class="form-control" id="productSupplier">
+                            <!-- Suppliers populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--outline" id="cancelProductBtn">Cancel</button>
+                <button class="btn btn--primary" id="saveProductBtn">Save Product</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Process Payment</h3>
+                <button class="modal-close" id="closeCheckoutModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-summary">
+                    <div class="total-amount" id="checkoutTotal">$0.00</div>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cash" checked>
+                            <span>Cash</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="card">
+                            <span>Card</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Customer Name (Optional)</label>
+                        <input type="text" class="form-control" id="customerName">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--outline" id="cancelCheckoutBtn">Cancel</button>
+                <button class="btn btn--primary" id="completePaymentBtn">Complete Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
