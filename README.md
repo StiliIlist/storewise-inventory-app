@@ -1,0 +1,1 @@
+# storewise-inventory-app
