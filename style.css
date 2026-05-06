@@ -1785,3 +1785,13 @@ select.form-control {
     page-break-inside: avoid;
   }
 }
+ 
+/* Delete button */
+.btn--danger {
+  background: transparent;
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+}
+.btn--danger:hover {
+  background: rgba(var(--color-error-rgb), 0.1);
+}
