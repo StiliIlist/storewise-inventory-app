@@ -247,6 +247,7 @@ class StoreWiseApp {
 
         // Lock manager — show lock screen first, then init app on unlock
         this.lock = new LockManager(() => this.afterUnlock());
+        setTimeout(() => SwTour.start(), 800);
         this.init();
     }
 
