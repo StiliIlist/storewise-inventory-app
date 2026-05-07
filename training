@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreWise AI — Training Center</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+  --teal:    #1a8c9c;
+  --teal-lt: #e6f7f9;
+  --teal-dk: #0f5c68;
+  --gold:    #e8a020;
+  --gold-lt: #fef7e8;
+  --red:     #c0152f;
+  --ink:     #0d1f23;
+  --ink-60:  #5a7178;
+  --ink-20:  #dde6e8;
+  --surface: #f8fbfc;
+  --white:   #ffffff;
+  --radius:  14px;
+  --shadow:  0 2px 16px rgba(13,31,35,0.08);
+  --shadow-lg: 0 8px 40px rgba(13,31,35,0.13);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ── HERO ──────────────────────────────────────────────────────────────────── */
+.hero {
+  background: var(--ink);
+  color: var(--white);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(26,140,156,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(232,160,32,0.12) 0%, transparent 60%);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.top-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 10;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-logo span { font-size: 24px; }
+
+.nav-links { display: flex; gap: 28px; }
+
+.nav-links a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-cta {
+  background: var(--teal);
+  color: var(--white) !important;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600 !important;
+}
+
+.hero-body {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 60px 48px;
+  gap: 48px;
+}
+
+.hero-text { flex: 1; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(26,140,156,0.2);
+  border: 1px solid rgba(26,140,156,0.4);
+  color: #5dd8e6;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: #5dd8e6;
+}
+
+.hero-subtitle {
+  font-size: 17px;
+  color: rgba(255,255,255,0.65);
+  max-width: 500px;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--teal); color: var(--white); }
+.btn-primary:hover { background: var(--teal-dk); transform: translateY(-1px); }
+.btn-ghost { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
+.btn-ghost:hover { background: rgba(255,255,255,0.18); }
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.stat { text-align: center; }
+.stat-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; color: var(--white); }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+/* ── PROGRESS BAR ─────────────────────────────────────────────────────────── */
+.progress-bar-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--ink-20);
+  padding: 20px 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.progress-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-60);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label span { color: var(--teal); font-weight: 700; }
+
+.progress-track {
+  height: 6px;
+  background: var(--ink-20);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), #5dd8e6);
+  border-radius: 100px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.section { padding: 72px 0; }
+
+.section-header { margin-bottom: 40px; }
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.section-desc {
+  font-size: 15px;
+  color: var(--ink-60);
+  margin-top: 10px;
+  max-width: 560px;
+  font-weight: 300;
+}
+
+/* ── CHECKLIST ────────────────────────────────────────────────────────────── */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.checklist-card {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.checklist-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+.checklist-card.done {
+  border-color: var(--teal);
+  background: var(--teal-lt);
+}
+
+.check-box {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--ink-20);
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+
+.checklist-card.done .check-box {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+
+.check-content { flex: 1; }
+.check-title { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 3px; }
+.check-desc  { font-size: 12px; color: var(--ink-60); }
+.check-badge { font-size: 10px; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+.progress-summary {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-emoji { font-size: 28px; }
+.progress-text { flex: 1; }
+.progress-text strong { display: block; font-size: 15px; color: var(--ink); }
+.progress-text span { font-size: 13px; color: var(--ink-60); }
+
+/* ── MODULES ──────────────────────────────────────────────────────────────── */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.module-card {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.module-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+.module-thumb {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.module-thumb::after {
+  content: '▶';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--teal);
+  opacity: 0;
+  transition: opacity 0.2s;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding-left: 3px;
+}
+
+.module-card:hover .module-thumb::after { opacity: 1; }
+
+.module-body { padding: 18px 20px; }
+
+.module-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.module-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+.module-desc  { font-size: 13px; color: var(--ink-60); font-weight: 300; margin-bottom: 12px; }
+
+.module-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.module-duration { color: var(--ink-60); }
+
+.module-tag {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.tag-beginner  { background: #e8f8f0; color: #1a7a4a; }
+.tag-advanced  { background: #fff3e0; color: #b35900; }
+.tag-owner     { background: #f0e8ff; color: #6b2eb5; }
+.tag-staff     { background: #e8f0ff; color: #2b5eb5; }
+
+/* ── VIDEO MODAL ──────────────────────────────────────────────────────────── */
+.video-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.video-modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.video-modal {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 0.3s;
+}
+
+.video-modal-overlay.open .video-modal { transform: scale(1); }
+
+.video-player {
+  aspect-ratio: 16/9;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-placeholder-icon { font-size: 80px; opacity: 0.3; }
+
+.video-placeholder-text {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  text-align: center;
+}
+
+.video-info { padding: 24px 28px; }
+.video-info h3 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.video-info p  { font-size: 14px; color: var(--ink-60); font-weight: 300; }
+
+.video-modal-footer {
+  padding: 16px 28px;
+  border-top: 1px solid var(--ink-20);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-close-video {
+  background: var(--ink-20);
+  color: var(--ink);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.btn-close-video:hover { background: var(--ink-60); color: white; }
+
+/* ── WRITTEN GUIDE ────────────────────────────────────────────────────────── */
+.guide-wrap {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.guide-nav {
+  display: flex;
+  border-bottom: 1px solid var(--ink-20);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.guide-nav::-webkit-scrollbar { display: none; }
+
+.guide-tab {
+  padding: 14px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-60);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.guide-tab:hover { color: var(--teal); }
+.guide-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+.guide-body { padding: 32px; }
+
+.guide-panel { display: none; }
+.guide-panel.active { display: block; }
+
+.guide-step {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--ink-20);
+}
+
+.guide-step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.step-num {
+  width: 36px;
+  height: 36px;
+  background: var(--teal);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.step-content { flex: 1; }
+.step-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+.step-desc  { font-size: 14px; color: var(--ink-60); font-weight: 300; line-height: 1.7; }
+
+.tip-box {
+  background: var(--teal-lt);
+  border: 1px solid rgba(26,140,156,0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--teal-dk);
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.warn-box {
+  background: var(--gold-lt);
+  border: 1px solid rgba(232,160,32,0.3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #7a5000;
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+kbd {
+  background: var(--ink);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────────────────────── */
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.faq-q {
+  padding: 18px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.15s;
+}
+
+.faq-q:hover { background: var(--surface); }
+
+.faq-icon {
+  font-size: 18px;
+  color: var(--ink-60);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  font-size: 14px;
+  color: var(--ink-60);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.faq-item.open .faq-a { max-height: 300px; }
+
+.faq-a-inner { padding: 0 20px 20px; }
+
+/* ── FOOTER ───────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 40px 48px;
+  font-size: 13px;
+}
+
+.footer a { color: var(--teal); text-decoration: none; }
+.footer strong { color: white; }
+
+/* ── SECTION DIVIDER ──────────────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-20), transparent);
+  margin: 0 48px;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .top-nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero-body { padding: 40px 20px; flex-direction: column; }
+  .hero-stats { justify-content: center; }
+  .page-wrap { padding: 0 20px; }
+  .modules-grid { grid-template-columns: 1fr; }
+  .checklist-grid { grid-template-columns: 1fr; }
+  .progress-bar-wrap { padding: 14px 20px; }
+  .divider { margin: 0 20px; }
+}
+
+/* ── ANIMATIONS ───────────────────────────────────────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <nav class="top-nav">
+    <a href="index.html" class="nav-logo"><span>🏪</span> StoreWise AI</a>
+    <div class="nav-links">
+      <a href="#checklist">Checklist</a>
+      <a href="#modules">Video Guides</a>
+      <a href="#written">Written Guide</a>
+      <a href="#faq">FAQ</a>
+      <a href="staff.html" class="nav-cta">Staff Quick Guide →</a>
+    </div>
+  </nav>
+
+  <div class="hero-body">
+    <div class="hero-text">
+      <div class="hero-eyebrow">📚 Training Center</div>
+      <h1 class="hero-title">Master your store.<br><em>In under an hour.</em></h1>
+      <p class="hero-subtitle">Everything you need to run StoreWise AI confidently — video walkthroughs, step-by-step guides, and a quick-start checklist.</p>
+      <div class="hero-actions">
+        <a href="#checklist" class="btn btn-primary">🚀 Start Onboarding</a>
+        <a href="staff.html" class="btn btn-ghost">Staff POS Guide →</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Training Modules</div></div>
+      <div class="stat"><div class="stat-num">~45</div><div class="stat-label">Minutes Total</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Browser-based</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- STICKY PROGRESS -->
+<div class="progress-bar-wrap" id="stickyProgress" style="display:none;">
+  <div class="progress-label">Onboarding Progress <span id="progressPct">0%</span></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+  <div class="page-wrap">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Step 1 — Start Here</div>
+      <h2 class="section-title">Onboarding Checklist</h2>
+      <p class="section-desc">Check off each task as you complete it. Your progress is saved automatically.</p>
+    </div>
+
+    <div class="checklist-grid fade-up">
+      <div class="checklist-card" data-task="0" onclick="toggleTask(0)">
+        <div class="check-box" id="cb0"></div>
+        <div class="check-content">
+          <div class="check-title">Create your PIN</div>
+          <div class="check-desc">Set up your 4–6 digit PIN to protect your store data.</div>
+          <div class="check-badge">🔐 Security</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="1" onclick="toggleTask(1)">
+        <div class="check-box" id="cb1"></div>
+        <div class="check-content">
+          <div class="check-title">Configure store settings</div>
+          <div class="check-desc">Add your store name, address, phone, and tax rate in Settings.</div>
+          <div class="check-badge">⚙️ Settings</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="2" onclick="toggleTask(2)">
+        <div class="check-box" id="cb2"></div>
+        <div class="check-content">
+          <div class="check-title">Add your first product</div>
+          <div class="check-desc">Go to Inventory → Add Product and fill in the details.</div>
+          <div class="check-badge">📦 Inventory</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="3" onclick="toggleTask(3)">
+        <div class="check-box" id="cb3"></div>
+        <div class="check-content">
+          <div class="check-title">Add your suppliers</div>
+          <div class="check-desc">Go to Suppliers and add the companies you order from.</div>
+          <div class="check-badge">🚚 Suppliers</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="4" onclick="toggleTask(4)">
+        <div class="check-box" id="cb4"></div>
+        <div class="check-content">
+          <div class="check-title">Process a test sale</div>
+          <div class="check-desc">Go to Sales & POS, add a product to cart, and complete a payment.</div>
+          <div class="check-badge">💳 Sales</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="5" onclick="toggleTask(5)">
+        <div class="check-box" id="cb5"></div>
+        <div class="check-content">
+          <div class="check-title">Connect cloud sync</div>
+          <div class="check-desc">Go to Settings → Data Sync and connect Google Drive, Dropbox, or a local file.</div>
+          <div class="check-badge">☁️ Sync</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="6" onclick="toggleTask(6)">
+        <div class="check-box" id="cb6"></div>
+        <div class="check-content">
+          <div class="check-title">Share staff guide with your team</div>
+          <div class="check-desc">Send the Staff Quick Guide link to anyone who uses the POS.</div>
+          <div class="check-badge">👥 Team</div>
+        </div>
+      </div>
+      <div class="checklist-card" data-task="7" onclick="toggleTask(7)">
+        <div class="check-box" id="cb7"></div>
+        <div class="check-content">
+          <div class="check-title">Review Analytics dashboard</div>
+          <div class="check-desc">Explore the Analytics section to understand your store performance metrics.</div>
+          <div class="check-badge">📈 Analytics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-summary fade-up" style="margin-top:20px;">
+      <div class="progress-emoji" id="progressEmoji">🌱</div>
+      <div class="progress-text">
+        <strong id="progressLabel">Just getting started!</strong>
+        <span id="progressSub">Complete tasks above to track your onboarding.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VIDEO MODULES -->
+<section class="section" id="modules">
+  <div class="page-wrap">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Step 2 — Watch & Learn</div>
+      <h2 class="section-title">Video Training Modules</h2>
+      <p class="section-desc">Short, focused walkthroughs for every part of the app. Replace placeholder videos with your own screen recordings.</p>
+    </div>
+
+    <div class="modules-grid fade-up" id="modulesGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Video Modal -->
+<div class="video-modal-overlay" id="videoModal">
+  <div class="video-modal">
+    <div class="video-player">
+      <div class="video-placeholder-icon" id="modalIcon">🏪</div>
+      <div class="video-placeholder-text" id="modalPlaceholder">
+        Replace this with a real video by adding a &lt;video&gt; tag or embedding a YouTube/Loom URL in the modules array in training.js
+      </div>
+    </div>
+    <div class="video-info">
+      <h3 id="modalTitle">Module Title</h3>
+      <p id="modalDesc">Description</p>
+    </div>
+    <div class="video-modal-footer">
+      <button class="btn-close-video" onclick="closeVideo()">✕ Close</button>
+      <a href="#written" class="btn btn-primary" onclick="closeVideo()" style="font-size:13px;">Read written guide →</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WRITTEN GUIDE -->
+<section class="section" id="written">
+  <div class="page-wrap">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Step 3 — Reference Guide</div>
+      <h2 class="section-title">Written User Guide</h2>
+      <p class="section-desc">Detailed step-by-step instructions for every feature. Bookmark this page for quick reference.</p>
+    </div>
+
+    <div class="guide-wrap fade-up">
+      <div class="guide-nav">
+        <div class="guide-tab active" onclick="switchTab('dashboard')">Dashboard</div>
+        <div class="guide-tab" onclick="switchTab('inventory')">Inventory</div>
+        <div class="guide-tab" onclick="switchTab('pos')">Sales & POS</div>
+        <div class="guide-tab" onclick="switchTab('suppliers')">Suppliers</div>
+        <div class="guide-tab" onclick="switchTab('analytics')">Analytics</div>
+        <div class="guide-tab" onclick="switchTab('security')">Security</div>
+        <div class="guide-tab" onclick="switchTab('sync')">Cloud Sync</div>
+      </div>
+
+      <div class="guide-body">
+
+        <div class="guide-panel active" id="panel-dashboard">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Understanding the Dashboard</div>
+              <div class="step-desc">The Dashboard is your store's command center. The four metric cards at the top show your Total Inventory Value (all products × their prices), Total Products in your catalog, Low Stock Alerts (products at or below minimum stock), and Today's Sales (all transactions completed today).</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Sales Overview Chart</div>
+              <div class="step-desc">The line chart shows your sales for the last 7 days. It updates automatically every time a sale is completed. If you've just started, most days will show $0 — that's normal.</div>
+              <div class="tip-box">💡 The chart pulls from real transaction data. To see activity, complete a few test sales in Sales & POS.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Stock Alerts Panel</div>
+              <div class="step-desc">This panel lists every product whose current stock is at or below its Minimum Stock setting. Click the Inventory section to manage these products and reorder from suppliers.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-inventory">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Adding a New Product</div>
+              <div class="step-desc">Click <strong>Add Product</strong> (top right or in the Inventory toolbar). Fill in the Product Name, Category, Price, Cost, Stock Quantity, and Minimum Stock. The Minimum Stock value is the threshold that triggers a low-stock alert on the dashboard.</div>
+              <div class="tip-box">💡 The <strong>Cost</strong> field is used to calculate your Gross Margin in Analytics. It's not shown to customers — it's for your records only.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Editing a Product</div>
+              <div class="step-desc">Click <strong>Edit</strong> on any product card. Change any field and click <strong>Save Product</strong>. Stock levels, prices, and supplier assignments can all be updated this way.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Searching and Filtering</div>
+              <div class="step-desc">Use the search bar to find products by name or barcode. Use the category dropdown to filter by product type. Both filters work together — you can search "milk" within "Dairy" only.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Deleting a Product</div>
+              <div class="step-desc">Click <strong>Delete</strong> on any product card. A confirmation prompt will appear. Deleted products cannot be recovered unless you have a backup — consider reducing stock to 0 instead if you may want it back.</div>
+              <div class="warn-box">⚠️ Deletion is permanent. Export your data first if you're unsure.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-pos">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Adding Products to Cart</div>
+              <div class="step-desc">In Sales & POS, type a product name or scan a barcode into the search bar. The matching product is added to the cart automatically. You can also click <strong>Add to Cart</strong> from the Inventory section.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Adjusting Quantities</div>
+              <div class="step-desc">Use the <kbd>+</kbd> and <kbd>-</kbd> buttons next to each cart item to change quantity. Click <kbd>×</kbd> to remove an item entirely. The subtotal, tax, and total update in real time.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Processing a Payment</div>
+              <div class="step-desc">Click <strong>Process Payment</strong>. Select Cash or Card, optionally enter the customer's name, then click <strong>Complete Payment</strong>. Stock levels update automatically and the transaction appears in Recent Transactions.</div>
+              <div class="tip-box">💡 Tax is calculated automatically based on your Tax Rate setting in Settings → Store Settings.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-suppliers">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Adding a Supplier</div>
+              <div class="step-desc">Go to Suppliers and click <strong>Add Supplier</strong>. Enter the supplier's name, phone number, and email address. Once saved, the supplier appears as an option when adding or editing products.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Linking Suppliers to Products</div>
+              <div class="step-desc">When adding or editing a product, choose the supplier from the dropdown. This links the product to a supplier so you can quickly identify where to reorder from when stock runs low.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-analytics">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Sales Trends Chart</div>
+              <div class="step-desc">Shows total sales per week for the past 4 weeks. Use this to spot your busiest periods and plan stock accordingly.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Top Products Chart</div>
+              <div class="step-desc">A doughnut chart showing the 5 most-sold products by quantity. Products with no sales show a placeholder value of 1 so the chart renders correctly.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Performance Metrics</div>
+              <div class="step-desc"><strong>Gross Margin</strong> is (Revenue − Cost) ÷ Revenue across your whole inventory. <strong>Inventory Turnover</strong> is units sold ÷ average stock. <strong>Avg. Transaction</strong> is the mean sale value. <strong>Stock Accuracy</strong> is the % of products above minimum stock level.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-security">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Your PIN protects everything</div>
+              <div class="step-desc">When you first open StoreWise, you create a 4–6 digit PIN. This PIN is the key that encrypts all your data using AES-256-GCM — an industry-standard encryption algorithm. Your PIN is never stored — only a salted hash is kept for verification.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Auto-lock</div>
+              <div class="step-desc">The app automatically locks after 15 minutes of inactivity. You can also lock it manually at any time using the <strong>🔒 Lock App</strong> button in the sidebar footer.</div>
+              <div class="tip-box">💡 Always lock the app when stepping away from a shared device.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Changing your PIN</div>
+              <div class="step-desc">Go to Settings → Security → Change PIN. You'll need your current PIN. All data is automatically re-encrypted with the new PIN.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Forgot your PIN?</div>
+              <div class="step-desc">On the lock screen, tap <em>Forgot PIN? Reset all data</em>. This permanently deletes all encrypted data and resets the app. This is why cloud sync and regular exports are important — they're your backup.</div>
+              <div class="warn-box">⚠️ There is no way to recover data without the PIN. The encryption is designed so that not even the app developers can access your data.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-panel" id="panel-sync">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Local File (simplest)</div>
+              <div class="step-desc">Go to Settings → Data Sync → Local File and click <strong>Choose / Create File</strong>. Pick where to save your data on your computer. The app auto-saves an encrypted <code>.enc</code> file every time data changes. Works in Chrome and Edge only.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Google Drive</div>
+              <div class="step-desc">Click <strong>Connect Google Drive</strong> and sign in with your Google account. An encrypted file called <code>storewise-data.enc</code> is created in your Drive. Google cannot read the contents — only you can, with your PIN.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Dropbox</div>
+              <div class="step-desc">Click <strong>Connect Dropbox</strong> and sign in. Works the same way as Google Drive — an encrypted file is saved to your Dropbox root folder.</div>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Manual Export/Import</div>
+              <div class="step-desc">Settings → Backup → Export All Data downloads a plain JSON file. This is a readable backup — useful for migrating data or as an emergency backup. Keep this file in a secure location.</div>
+              <div class="warn-box">⚠️ Exported JSON files are <strong>not encrypted</strong>. Don't store them in shared folders.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="page-wrap">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Got Questions?</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list fade-up" id="faqList"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><strong>StoreWise AI</strong> · Training Center · <a href="index.html">Open App</a> · <a href="staff.html">Staff Guide</a></p>
+  <p style="margin-top:8px;">Data encrypted with AES-256-GCM · Runs 100% in your browser · No data sent to any server</p>
+</footer>
+
+<script>
+// ── CHECKLIST ──────────────────────────────────────────────────────────────
+const TOTAL_TASKS = 8;
+let tasks = JSON.parse(localStorage.getItem('sw_onboarding') || '[]');
+
+const progressEmojis  = ['🌱','🌿','🌳','⭐','🌟','💪','🏆','🎉'];
+const progressLabels  = ['Just getting started!','Good start — keep going!','Making great progress!','Halfway there!','More than halfway done!','Almost there!','One last step!','You\'re all set! 🎉'];
+const progressSubs    = [
+  'Complete tasks above to track your onboarding.',
+  'Keep checking off tasks to complete your setup.',
+  'You\'re getting the hang of it!',
+  'Four down, four to go.',
+  'The finish line is in sight.',
+  'Nearly done with your store setup.',
+  'Complete the last task to finish onboarding.',
+  'Your store is fully configured and ready to go.'
+];
+
+function renderChecklist() {
+  tasks.forEach((done, i) => {
+    const card = document.querySelector(`[data-task="${i}"]`);
+    const box  = document.getElementById(`cb${i}`);
+    if (!card || !box) return;
+    card.classList.toggle('done', done);
+    box.textContent = done ? '✓' : '';
+  });
+  const count = tasks.filter(Boolean).length;
+  const pct   = Math.round(count / TOTAL_TASKS * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent  = pct + '%';
+  document.getElementById('progressEmoji').textContent = progressEmojis[count] || '🎉';
+  document.getElementById('progressLabel').textContent = progressLabels[count] || 'Complete!';
+  document.getElementById('progressSub').textContent   = progressSubs[count]   || '';
+  // Show sticky progress after first interaction
+  if (count > 0) document.getElementById('stickyProgress').style.display = 'block';
+}
+
+function toggleTask(i) {
+  if (tasks.length < TOTAL_TASKS) tasks = Array(TOTAL_TASKS).fill(false);
+  tasks[i] = !tasks[i];
+  localStorage.setItem('sw_onboarding', JSON.stringify(tasks));
+  renderChecklist();
+}
+
+if (tasks.length < TOTAL_TASKS) tasks = Array(TOTAL_TASKS).fill(false);
+renderChecklist();
+
+// ── VIDEO MODULES ──────────────────────────────────────────────────────────
+const modules = [
+  { num:'01', icon:'🏪', bg:'#e6f7f9', title:'App Overview & First Login', desc:'Tour the app, understand the layout, and set up your PIN for the first time.', duration:'5 min', tag:'beginner', tagLabel:'Beginner', videoUrl:null },
+  { num:'02', icon:'📦', bg:'#f0e8ff', title:'Inventory Management', desc:'Add, edit, and delete products. Set stock levels, categories, and suppliers.', duration:'8 min', tag:'beginner', tagLabel:'Beginner', videoUrl:null },
+  { num:'03', icon:'💳', bg:'#e8f8f0', title:'Sales & POS Walkthrough', desc:'Process a sale from start to finish. Handle cash and card payments.', duration:'6 min', tag:'staff', tagLabel:'Staff', videoUrl:null },
+  { num:'04', icon:'📈', bg:'#fff3e0', title:'Analytics & Reporting', desc:'Read your performance metrics, spot trends, and understand top products.', duration:'7 min', tag:'owner', tagLabel:'Owner', videoUrl:null },
+  { num:'05', icon:'☁️', bg:'#fef7e8', title:'Cloud Sync Setup', desc:'Connect Google Drive, Dropbox, or a local file to keep your data backed up.', duration:'10 min', tag:'owner', tagLabel:'Owner', videoUrl:null },
+  { num:'06', icon:'🔐', bg:'#fce8e8', title:'Security & PIN Management', desc:'Understand encryption, change your PIN, and set up auto-lock.', duration:'5 min', tag:'advanced', tagLabel:'Advanced', videoUrl:null },
+];
+
+document.getElementById('modulesGrid').innerHTML = modules.map((m,i) => `
+  <div class="module-card" onclick="openVideo(${i})">
+    <div class="module-thumb" style="background:${m.bg}">${m.icon}</div>
+    <div class="module-body">
+      <div class="module-num">Module ${m.num}</div>
+      <div class="module-title">${m.title}</div>
+      <div class="module-desc">${m.desc}</div>
+      <div class="module-meta">
+        <span class="module-duration">⏱ ${m.duration}</span>
+        <span class="module-tag tag-${m.tag}">${m.tagLabel}</span>
+      </div>
+    </div>
+  </div>`).join('');
+
+function openVideo(i) {
+  const m = modules[i];
+  document.getElementById('modalIcon').textContent = m.icon;
+  document.getElementById('modalTitle').textContent = m.title;
+  document.getElementById('modalDesc').textContent  = m.desc;
+  document.getElementById('videoModal').classList.add('open');
+}
+function closeVideo() {
+  document.getElementById('videoModal').classList.remove('open');
+}
+document.getElementById('videoModal').addEventListener('click', e => {
+  if (e.target.id === 'videoModal') closeVideo();
+});
+
+// ── GUIDE TABS ─────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.guide-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.guide-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+// ── FAQ ────────────────────────────────────────────────────────────────────
+const faqs = [
+  { q:'What happens if I forget my PIN?', a:'On the lock screen, tap "Forgot PIN? Reset all data." This deletes all encrypted data and lets you start fresh. This is why connecting cloud sync (Google Drive, Dropbox) and doing regular exports is so important — those are your backups.' },
+  { q:'Is my data ever sent to a server?', a:'No. StoreWise runs 100% in your browser. Data lives in your browser\'s localStorage and, if you connect sync, in your own Google Drive or Dropbox account. No third-party server ever receives your data.' },
+  { q:'Can I use the app on multiple devices?', a:'Yes — connect Google Drive or Dropbox sync on each device using the same account. When you make changes on one device and open the app on another, load the latest data using the "Load from Drive/Dropbox" button in Settings → Data Sync.' },
+  { q:'What does the Local File sync do exactly?', a:'It saves an encrypted .enc file to a location you choose on your computer (Documents, USB drive, Dropbox folder, etc.) and updates it automatically every time you make a change. This only works in Chrome and Edge due to browser security restrictions.' },
+  { q:'Can my staff access the app?', a:'Yes. Share the app URL with staff. Each person will be prompted to create their own PIN on first use. If you want a single shared PIN for all staff, you can set one PIN and share it — but note that whoever forgets the PIN loses access.' },
+  { q:'How do I add my logo or customize the app name?', a:'Open index.html and change the store name in the Settings panel, or edit the HTML directly. The sidebar shows the store name from your Settings → Store Settings → Store Name field.' },
+  { q:'Why does the File System sync only work in Chrome/Edge?', a:'The File System Access API is a relatively new browser feature not yet supported in Firefox or Safari. For those browsers, use Google Drive or Dropbox sync instead.' },
+  { q:'How do I update the app when a new version is released?', a:'Since the app is hosted on GitHub Pages, just pull the latest files from the repository and push them. Your data in localStorage (and cloud sync) is separate from the app code, so updates never overwrite your data.' },
+];
+
+document.getElementById('faqList').innerHTML = faqs.map((f,i) => `
+  <div class="faq-item" id="faq${i}">
+    <div class="faq-q" onclick="toggleFAQ(${i})">${f.q}<span class="faq-icon">+</span></div>
+    <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
+  </div>`).join('');
+
+function toggleFAQ(i) {
+  document.getElementById('faq'+i).classList.toggle('open');
+}
+
+// ── FADE IN ON SCROLL ──────────────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
