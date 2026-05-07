@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoreWise — Staff Quick Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --teal:  #1a8c9c;
+  --teal-lt: #e6f7f9;
+  --gold:  #e8a020;
+  --gold-lt: #fef7e8;
+  --red:   #c0152f;
+  --red-lt: #fce8e8;
+  --green: #1a7a4a;
+  --green-lt: #e8f8f0;
+  --ink:   #0d1f23;
+  --ink-60: #5a7178;
+  --ink-20: #dde6e8;
+  --bg:    #f8fbfc;
+  --white: #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────────────────────────── */
+.topbar {
+  background: var(--ink);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+}
+
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.topbar-logo span { font-size: 22px; }
+
+.topbar-links { display: flex; gap: 16px; }
+
+.topbar-links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.topbar-links a:hover { color: white; }
+
+.print-btn {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.print-btn:hover { background: #0f5c68; }
+
+/* ── HERO ──────────────────────────────────────────────────────────────────── */
+.page-hero {
+  background: linear-gradient(135deg, var(--teal) 0%, #0f5c68 100%);
+  color: white;
+  padding: 48px 32px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.page-hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.page-hero p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+  position: relative;
+}
+
+/* ── CONTENT ──────────────────────────────────────────────────────────────── */
+.content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ── SECTION ──────────────────────────────────────────────────────────────── */
+.guide-section {
+  margin-bottom: 40px;
+}
+
+.guide-section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.guide-section-title .section-num {
+  width: 28px;
+  height: 28px;
+  background: var(--teal);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ── STEPS FLOW ───────────────────────────────────────────────────────────── */
+.steps-flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.step-card {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: 12px;
+  padding: 18px 16px;
+  text-align: center;
+  position: relative;
+}
+
+.step-card::after {
+  content: '→';
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-60);
+  font-size: 18px;
+  font-weight: 700;
+  z-index: 1;
+}
+
+.step-card:last-child::after { display: none; }
+
+.step-icon { font-size: 32px; margin-bottom: 10px; }
+.step-label { font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+.step-sub   { font-size: 12px; color: var(--ink-60); font-weight: 300; }
+
+/* ── TWO COLUMN ───────────────────────────────────────────────────────────── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ── CARD ──────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--ink-20);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 14px 18px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink-20);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-body { padding: 16px 18px; }
+
+/* ── CHECKLIST ROW ────────────────────────────────────────────────────────── */
+.checklist-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ink-20);
+  font-size: 13px;
+}
+
+.checklist-row:last-child { border-bottom: none; }
+
+.row-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.dot-green  { background: var(--green); }
+.dot-gold   { background: var(--gold); }
+.dot-red    { background: var(--red); }
+.dot-teal   { background: var(--teal); }
+
+.row-text { flex: 1; color: var(--ink); line-height: 1.5; }
+.row-text strong { font-weight: 600; }
+
+/* ── SHORTCUT TABLE ───────────────────────────────────────────────────────── */
+.shortcut-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.shortcut-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--bg);
+  color: var(--ink-60);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--ink-20);
+}
+
+.shortcut-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ink-20);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.shortcut-table tr:last-child td { border-bottom: none; }
+
+kbd {
+  background: var(--ink);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+/* ── ALERT BOX ────────────────────────────────────────────────────────────── */
+.alert-box {
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+
+.alert-box.green { background: var(--green-lt); color: #0f4a2c; border: 1px solid rgba(26,122,74,0.2); }
+.alert-box.gold  { background: var(--gold-lt);  color: #7a5000; border: 1px solid rgba(232,160,32,0.25); }
+.alert-box.red   { background: var(--red-lt);   color: #7a0a1a; border: 1px solid rgba(192,21,47,0.2); }
+
+/* ── EMERGENCY BOX ────────────────────────────────────────────────────────── */
+.emergency {
+  background: var(--red-lt);
+  border: 2px solid var(--red);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.emergency-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--red);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.emergency-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.emergency-row:last-child { margin-bottom: 0; }
+.emergency-num {
+  width: 20px;
+  height: 20px;
+  background: var(--red);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── FOOTER ───────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 28px 32px;
+  font-size: 12px;
+}
+.footer a { color: var(--teal); text-decoration: none; }
+.footer strong { color: white; }
+
+/* ── PRINT STYLES ─────────────────────────────────────────────────────────── */
+@media print {
+  .topbar, .print-btn { display: none !important; }
+  .page-hero { background: var(--teal) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .step-card, .card { break-inside: avoid; }
+  body { background: white; }
+  .content { padding: 20px; }
+}
+
+@media (max-width: 640px) {
+  .steps-flow { grid-template-columns: 1fr 1fr; }
+  .step-card::after { display: none; }
+  .two-col { grid-template-columns: 1fr; }
+  .content { padding: 24px 16px 60px; }
+  .topbar { padding: 12px 16px; }
+  .page-hero { padding: 36px 16px 28px; }
+  .topbar-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo"><span>🏪</span> StoreWise AI</div>
+  <div class="topbar-links">
+    <a href="index.html">Open App</a>
+    <a href="training.html">Full Training</a>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-badge">👤 Staff Reference</div>
+  <h1>Staff Quick Guide</h1>
+  <p>Everything you need to process sales and manage your shift — keep this page open or print it out.</p>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SECTION 1: HOW TO PROCESS A SALE -->
+  <div class="guide-section">
+    <div class="guide-section-title">
+      <div class="section-num">1</div>
+      How to Process a Sale
+    </div>
+    <div class="steps-flow">
+      <div class="step-card">
+        <div class="step-icon">🔑</div>
+        <div class="step-label">Unlock the App</div>
+        <div class="step-sub">Enter your PIN on the lock screen</div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">💳</div>
+        <div class="step-label">Open Sales & POS</div>
+        <div class="step-sub">Click "Sales & POS" in the sidebar</div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🛒</div>
+        <div class="step-label">Add Products</div>
+        <div class="step-sub">Search by name or scan barcode</div>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">✅</div>
+        <div class="step-label">Process Payment</div>
+        <div class="step-sub">Click "Process Payment" and select cash or card</div>
+      </div>
+    </div>
+    <div class="alert-box green" style="margin-top:16px;">
+      ✅ Stock levels update <strong>automatically</strong> when a sale is completed. You don't need to do anything extra.
+    </div>
+  </div>
+
+  <!-- SECTION 2: COMMON TASKS -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="section-num">2</div>Common Tasks</div>
+    <div class="two-col">
+
+      <div class="card">
+        <div class="card-header">🛒 Managing the Cart</div>
+        <div class="card-body">
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text"><strong>Add item:</strong> Type name in search bar — it adds automatically when found</div></div>
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text"><strong>Change quantity:</strong> Use <kbd>+</kbd> and <kbd>-</kbd> buttons next to each item</div></div>
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text"><strong>Remove item:</strong> Click the <kbd>×</kbd> button next to the item</div></div>
+          <div class="checklist-row"><div class="row-dot dot-gold"></div><div class="row-text"><strong>Clear cart:</strong> Click "Clear Cart" to start over — this does NOT complete a sale</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">💰 Payment Types</div>
+        <div class="card-body">
+          <div class="checklist-row"><div class="row-dot dot-green"></div><div class="row-text"><strong>Cash:</strong> Select "Cash" on the payment screen. The system records it as cash — you handle change manually.</div></div>
+          <div class="checklist-row"><div class="row-dot dot-green"></div><div class="row-text"><strong>Card:</strong> Select "Card" on the payment screen. Run the card through your card terminal separately.</div></div>
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text"><strong>Customer name:</strong> Optional. Enter it on the payment screen for records.</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🔍 Finding Products</div>
+        <div class="card-body">
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text">Type part of the product name in the search bar — it finds as you type</div></div>
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text">Scan a barcode — the product is added to cart instantly</div></div>
+          <div class="checklist-row"><div class="row-dot dot-gold"></div><div class="row-text">If a product isn't found, contact your manager — it may need to be added to inventory</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🔒 Locking the App</div>
+        <div class="card-body">
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text">Click <strong>🔒 Lock App</strong> in the sidebar footer before leaving the register</div></div>
+          <div class="checklist-row"><div class="row-dot dot-teal"></div><div class="row-text">The app auto-locks after 15 minutes of inactivity</div></div>
+          <div class="checklist-row"><div class="row-dot dot-red"></div><div class="row-text"><strong>Never leave the app unlocked</strong> when stepping away from the register</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 3: WHAT TO DO IF... -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="section-num">3</div>What To Do If…</div>
+    <div class="card">
+      <div class="card-body" style="padding:0;">
+        <table class="shortcut-table">
+          <thead>
+            <tr><th>Situation</th><th>What to do</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Product not found in search</td>
+              <td>Try searching with fewer letters. If still not found, note the product and contact your manager to add it to inventory.</td>
+            </tr>
+            <tr>
+              <td>Wrong item added to cart</td>
+              <td>Click the <kbd>×</kbd> button next to the item to remove it, or use <kbd>-</kbd> to reduce quantity to 0 is not possible — just remove it.</td>
+            </tr>
+            <tr>
+              <td>Completed a sale by mistake</td>
+              <td>Contact your manager. The manager can check the transaction in Recent Transactions, but cannot reverse it in the app — they'll need to handle it manually.</td>
+            </tr>
+            <tr>
+              <td>App shows "locked" screen</td>
+              <td>Enter the store PIN. If you don't know it, contact your manager.</td>
+            </tr>
+            <tr>
+              <td>App is blank / not loading</td>
+              <td>Refresh the page. If it still doesn't load, check your internet connection and try again.</td>
+            </tr>
+            <tr>
+              <td>Customer wants a refund</td>
+              <td>Handle the cash/card refund manually. Tell your manager so they can update inventory stock manually if needed.</td>
+            </tr>
+            <tr>
+              <td>Browser closes mid-sale</td>
+              <td>Reopen the app and re-enter PIN. The cart is not saved between sessions — you'll need to re-add the items.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: WHAT NOT TO DO -->
+  <div class="guide-section">
+    <div class="guide-section-title"><div class="section-num">4</div>Important Rules</div>
+    <div class="two-col">
+      <div>
+        <div class="checklist-row" style="border:none;background:var(--red-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-red" style="margin-top:5px;"></div><div class="row-text"><strong>Don't delete products</strong> — only managers should do this</div></div>
+        <div class="checklist-row" style="border:none;background:var(--red-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-red" style="margin-top:5px;"></div><div class="row-text"><strong>Don't edit product prices</strong> without manager approval</div></div>
+        <div class="checklist-row" style="border:none;background:var(--red-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-red" style="margin-top:5px;"></div><div class="row-text"><strong>Don't share the PIN</strong> with customers or visitors</div></div>
+        <div class="checklist-row" style="border:none;background:var(--red-lt);padding:10px 14px;border-radius:8px;"><div class="row-dot dot-red" style="margin-top:5px;"></div><div class="row-text"><strong>Don't click Export/Import/Reset</strong> in Settings — those are manager functions</div></div>
+      </div>
+      <div>
+        <div class="checklist-row" style="border:none;background:var(--green-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-green" style="margin-top:5px;"></div><div class="row-text"><strong>Always complete a payment</strong> before clearing the cart</div></div>
+        <div class="checklist-row" style="border:none;background:var(--green-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-green" style="margin-top:5px;"></div><div class="row-text"><strong>Lock the app</strong> whenever you step away</div></div>
+        <div class="checklist-row" style="border:none;background:var(--green-lt);padding:10px 14px;border-radius:8px;margin-bottom:8px;"><div class="row-dot dot-green" style="margin-top:5px;"></div><div class="row-text"><strong>Tell your manager</strong> if stock looks wrong for any product</div></div>
+        <div class="checklist-row" style="border:none;background:var(--green-lt);padding:10px 14px;border-radius:8px;"><div class="row-dot dot-green" style="margin-top:5px;"></div><div class="row-text"><strong>Note the transaction ID</strong> shown after each completed sale</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMERGENCY -->
+  <div class="emergency">
+    <div class="emergency-title">🚨 If Something Goes Seriously Wrong</div>
+    <div class="emergency-row"><div class="emergency-num">1</div><div>Don't click anything else — take a photo of the screen with your phone</div></div>
+    <div class="emergency-row"><div class="emergency-num">2</div><div>Write down the last transaction ID and the time it happened</div></div>
+    <div class="emergency-row"><div class="emergency-num">3</div><div>Call your manager immediately — don't try to fix it yourself</div></div>
+    <div class="emergency-row"><div class="emergency-num">4</div><div>If the app is frozen, refresh the page — data is saved automatically</div></div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p><strong>StoreWise AI</strong> · Staff Quick Guide · <a href="training.html">Full Training →</a> · <a href="index.html">Open App →</a></p>
+  <p style="margin-top:6px;">Print this page and keep it at the register · Press Ctrl+P (or ⌘+P on Mac) to print</p>
+</footer>
+
+</body>
+</html>
