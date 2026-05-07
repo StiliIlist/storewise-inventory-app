@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StoreWise AI - Inventory Management</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lock.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="app-container">
+
+<!-- App shell — hidden until PIN unlocked -->
+<div class="app-container" id="appShell" style="display:none;">
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
@@ -32,8 +35,8 @@
                 <div class="store-name">Sunny Corner Market</div>
                 <div class="store-status">Online</div>
             </div>
-            <!-- Sync badge in sidebar footer -->
             <div style="margin-top:8px;font-size:11px;color:var(--color-text-secondary);text-align:center;" id="syncBadge">💾 Browser Only</div>
+            <button class="btn btn--outline btn--sm btn--full-width" id="lockAppBtn" style="margin-top:10px;font-size:12px;">🔒 Lock App</button>
         </div>
     </nav>
 
@@ -152,12 +155,13 @@
                     <div class="settings-nav-item active" data-settings="store">Store Settings</div>
                     <div class="settings-nav-item" data-settings="inventory">Inventory</div>
                     <div class="settings-nav-item" data-settings="alerts">Alerts</div>
+                    <div class="settings-nav-item" data-settings="security">🔐 Security</div>
                     <div class="settings-nav-item" data-settings="sync">☁️ Data Sync</div>
                     <div class="settings-nav-item" data-settings="backup">Backup</div>
                 </div>
                 <div class="settings-content">
 
-                    <!-- Store Settings -->
+                    <!-- Store -->
                     <div class="settings-panel active" id="storeSettings">
                         <div class="card"><div class="card__header"><h3>Store Information</h3></div><div class="card__body">
                             <div class="form-group"><label class="form-label">Store Name</label><input type="text" class="form-control" id="settingsStoreName"></div>
@@ -186,29 +190,56 @@
                         </div></div>
                     </div>
 
-                    <!-- ══════════════════════════════════════════════════════
-                         DATA SYNC PANEL (NEW)
-                         ══════════════════════════════════════════════════════ -->
-                    <div class="settings-panel" id="syncSettings">
+                    <!-- Security -->
+                    <div class="settings-panel" id="securitySettings">
+                        <div class="card" style="margin-bottom:16px;">
+                            <div class="card__header"><h3>🔐 PIN Protection</h3></div>
+                            <div class="card__body">
+                                <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;">Your app is protected by a PIN. All data is encrypted with AES-256-GCM using your PIN as the key — even if someone opens the browser storage, they see only encrypted gibberish without your PIN.</p>
+                                <div style="display:grid;gap:10px;">
+                                    <button class="btn btn--outline" id="changePINBtn">🔑 Change PIN</button>
+                                    <button class="btn btn--outline" id="lockAppBtn2" onclick="window.app.lock.lock()">🔒 Lock App Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card__header"><h3>Auto-lock</h3></div>
+                            <div class="card__body">
+                                <p style="font-size:13px;color:var(--color-text-secondary);">The app automatically locks after <strong>15 minutes</strong> of inactivity. This is set in <code>CONFIG.AUTO_LOCK_MS</code> in <code>app.js</code>. Set to <code>0</code> to disable.</p>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-top:16px;">
+                            <div class="card__header"><h3>What is encrypted?</h3></div>
+                            <div class="card__body">
+                                <div style="display:grid;gap:8px;font-size:13px;">
+                                    <div style="display:flex;gap:8px;align-items:center;">✅ <span>All data in browser storage (localStorage)</span></div>
+                                    <div style="display:flex;gap:8px;align-items:center;">✅ <span>Files saved to Google Drive (<code>storewise-data.enc</code>)</span></div>
+                                    <div style="display:flex;gap:8px;align-items:center;">✅ <span>Files saved to Dropbox (<code>storewise-data.enc</code>)</span></div>
+                                    <div style="display:flex;gap:8px;align-items:center;">✅ <span>Files saved to local disk via File System API</span></div>
+                                    <div style="display:flex;gap:8px;align-items:center;">⚠️ <span>Manual exports (Export button) are <strong>plain JSON</strong> — store them carefully</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- Current status -->
+                    <!-- Data Sync -->
+                    <div class="settings-panel" id="syncSettings">
                         <div class="card" style="margin-bottom:16px;">
                             <div class="card__header"><h3>Current Sync</h3></div>
                             <div class="card__body">
-                                <p style="margin:0;color:var(--color-text-secondary);font-size:13px;">Your data is always saved in your browser automatically. Connect a cloud provider or local file below to keep a copy that travels with you.</p>
-                                <div style="margin-top:12px;font-size:14px;font-weight:600;" id="syncDetail">Browser Only</div>
+                                <p style="margin:0 0 8px;font-size:13px;color:var(--color-text-secondary);">Data is always encrypted before leaving your browser. Cloud providers only ever see an encrypted blob — they cannot read your inventory data.</p>
+                                <div style="font-size:14px;font-weight:600;" id="syncDetail">Browser Only</div>
                             </div>
                         </div>
 
-                        <!-- Option 1: Local File (File System API) -->
+                        <!-- Local File -->
                         <div class="card" style="margin-bottom:16px;">
                             <div class="card__header" style="display:flex;justify-content:space-between;align-items:center;">
-                                <h3>📁 Local File</h3>
-                                <span style="font-size:12px;color:var(--color-text-secondary);">Chrome / Edge only</span>
+                                <h3>📁 Local File</h3><span style="font-size:12px;color:var(--color-text-secondary);">Chrome / Edge</span>
                             </div>
                             <div class="card__body">
-                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Save your data to a <code>.json</code> file anywhere on your computer — Documents, Dropbox folder, USB drive, whatever you like. Changes auto-save every time you make them. No account needed.</p>
-                                <div id="active_filesystem" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected to local file — auto-saving</div>
+                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Save encrypted data to a file anywhere on your PC. Put it in your Dropbox or OneDrive folder for manual cloud sync. No account needed.</p>
+                                <div id="active_filesystem" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected — auto-saving encrypted file</div>
                                 <div style="display:flex;gap:8px;">
                                     <button class="btn btn--primary" id="connect_filesystem">📁 Choose / Create File</button>
                                     <button class="btn btn--outline" id="disconnect_filesystem" style="display:none;">Disconnect</button>
@@ -216,24 +247,23 @@
                             </div>
                         </div>
 
-                        <!-- Option 2: Google Drive -->
+                        <!-- Google Drive -->
                         <div class="card" style="margin-bottom:16px;">
                             <div class="card__header" style="display:flex;justify-content:space-between;align-items:center;">
-                                <h3>🟢 Google Drive</h3>
-                                <span style="font-size:12px;color:var(--color-text-secondary);">Requires setup</span>
+                                <h3>🟢 Google Drive</h3><span style="font-size:12px;color:var(--color-text-secondary);">Requires setup</span>
                             </div>
                             <div class="card__body">
-                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Sync data to a file called <code>storewise-data.json</code> in your personal Google Drive. Each user connects their own Google account — you never see their data.</p>
-                                <div id="active_gdrive" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected to Google Drive — auto-saving</div>
+                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Saves an <strong>encrypted</strong> file (<code>storewise-data.enc</code>) to each user's personal Google Drive. Google cannot read the contents.</p>
+                                <div id="active_gdrive" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected to Google Drive — auto-saving encrypted</div>
                                 <details style="margin-bottom:12px;">
                                     <summary style="cursor:pointer;font-size:13px;color:var(--color-primary);">⚙️ Setup instructions</summary>
                                     <ol style="font-size:12px;color:var(--color-text-secondary);margin:8px 0 0 16px;line-height:1.8;">
                                         <li>Go to <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></li>
-                                        <li>Create a project → Enable <strong>Google Drive API</strong></li>
-                                        <li>OAuth consent screen → External → Add your GitHub Pages URL as authorized domain</li>
-                                        <li>Credentials → Create OAuth Client ID → Web application</li>
-                                        <li>Add <code>https://stiliilist.github.io/storewise-inventory-app/</code> as Authorized redirect URI</li>
-                                        <li>Copy the Client ID and paste it in <code>app.js</code> at the top: <code>GOOGLE_CLIENT_ID: 'your-id-here'</code></li>
+                                        <li>Create project → Enable <strong>Google Drive API</strong></li>
+                                        <li>OAuth consent → External → add your GitHub Pages domain</li>
+                                        <li>Credentials → OAuth Client ID → Web app</li>
+                                        <li>Add your GitHub Pages URL as Redirect URI</li>
+                                        <li>Paste Client ID into <code>CONFIG.GOOGLE_CLIENT_ID</code> in <code>app.js</code></li>
                                     </ol>
                                 </details>
                                 <div style="display:flex;gap:8px;">
@@ -244,22 +274,21 @@
                             </div>
                         </div>
 
-                        <!-- Option 3: Dropbox -->
+                        <!-- Dropbox -->
                         <div class="card" style="margin-bottom:16px;">
                             <div class="card__header" style="display:flex;justify-content:space-between;align-items:center;">
-                                <h3>🔵 Dropbox</h3>
-                                <span style="font-size:12px;color:var(--color-text-secondary);">Requires setup</span>
+                                <h3>🔵 Dropbox</h3><span style="font-size:12px;color:var(--color-text-secondary);">Requires setup</span>
                             </div>
                             <div class="card__body">
-                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Sync data to <code>/storewise-data.json</code> in each user's personal Dropbox. Works across devices automatically once connected.</p>
-                                <div id="active_dropbox" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected to Dropbox — auto-saving</div>
+                                <p style="margin:0 0 12px;font-size:13px;color:var(--color-text-secondary);">Saves an <strong>encrypted</strong> file to each user's Dropbox. Dropbox cannot read the contents. Works across all devices.</p>
+                                <div id="active_dropbox" style="display:none;margin-bottom:12px;" class="status status--success">✅ Connected to Dropbox — auto-saving encrypted</div>
                                 <details style="margin-bottom:12px;">
                                     <summary style="cursor:pointer;font-size:13px;color:var(--color-primary);">⚙️ Setup instructions</summary>
                                     <ol style="font-size:12px;color:var(--color-text-secondary);margin:8px 0 0 16px;line-height:1.8;">
                                         <li>Go to <a href="https://www.dropbox.com/developers/apps" target="_blank">dropbox.com/developers/apps</a></li>
-                                        <li>Create App → Scoped access → Full Dropbox</li>
-                                        <li>Under <strong>OAuth 2</strong>, add your GitHub Pages URL as Redirect URI:<br><code>https://stiliilist.github.io/storewise-inventory-app/</code></li>
-                                        <li>Copy the <strong>App key</strong> and paste it in <code>app.js</code>: <code>DROPBOX_APP_KEY: 'your-key-here'</code></li>
+                                        <li>Create App → Scoped → Full Dropbox</li>
+                                        <li>Add your GitHub Pages URL as Redirect URI</li>
+                                        <li>Paste App Key into <code>CONFIG.DROPBOX_APP_KEY</code> in <code>app.js</code></li>
                                     </ol>
                                 </details>
                                 <div style="display:flex;gap:8px;">
@@ -269,12 +298,12 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div><!-- /syncSettings -->
+                    </div>
 
                     <!-- Backup -->
                     <div class="settings-panel" id="backupSettings">
                         <div class="card"><div class="card__header"><h3>Data Management</h3></div><div class="card__body">
+                            <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;">⚠️ Exported files are <strong>plain JSON</strong> (unencrypted) for portability. Keep them safe.</p>
                             <div class="backup-actions">
                                 <button class="btn btn--outline btn--full-width" id="settingsExportBtn">⬇️ Export All Data (.json)</button>
                                 <button class="btn btn--outline btn--full-width" id="settingsImportBtn">⬆️ Import Data (.json)</button>
@@ -286,9 +315,10 @@
                 </div>
             </div>
         </section>
-
     </main>
 </div>
+
+<!-- ── MODALS ─────────────────────────────────────────────────────────────── -->
 
 <!-- Product Modal -->
 <div class="modal hidden" id="productModal">
@@ -353,6 +383,26 @@
     </div>
 </div>
 
+<!-- Change PIN Modal -->
+<div class="modal hidden" id="changePINModal">
+    <div class="modal-content">
+        <div class="modal-header"><h3>🔑 Change PIN</h3><button class="modal-close" id="closeChangePINModal">×</button></div>
+        <div class="modal-body">
+            <form id="changePINForm">
+                <div class="form-group"><label class="form-label">Current PIN</label><input type="password" class="form-control" id="oldPIN" inputmode="numeric" maxlength="6" placeholder="••••"></div>
+                <div class="form-group"><label class="form-label">New PIN (4–6 digits)</label><input type="password" class="form-control" id="newPIN" inputmode="numeric" maxlength="6" placeholder="••••"></div>
+                <div class="form-group"><label class="form-label">Confirm New PIN</label><input type="password" class="form-control" id="confirmNewPIN" inputmode="numeric" maxlength="6" placeholder="••••"></div>
+            </form>
+            <div id="changePINError" class="lock-error hidden"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn--outline" id="closeChangePINModal">Cancel</button>
+            <button class="btn btn--primary" id="saveChangePINBtn">Update PIN</button>
+        </div>
+    </div>
+</div>
+
+<script src="crypto.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
