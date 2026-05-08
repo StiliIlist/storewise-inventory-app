@@ -4,7 +4,6 @@
 
 const SwCrypto = {
 
-    // Derive AES-256 key from password using PBKDF2 (310,000 iterations)
     async deriveKey(password, salt) {
         const enc    = new TextEncoder();
         const keyMat = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
@@ -17,7 +16,6 @@ const SwCrypto = {
         );
     },
 
-    // Encrypt plaintext → base64 blob (salt[16] + iv[12] + ciphertext)
     async encrypt(plaintext, password) {
         const enc  = new TextEncoder();
         const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -29,7 +27,6 @@ const SwCrypto = {
         return btoa(String.fromCharCode(...buf));
     },
 
-    // Decrypt base64 blob → plaintext. Throws if password wrong.
     async decrypt(encoded, password) {
         const buf = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
         const key = await this.deriveKey(password, buf.slice(0,16));
@@ -37,7 +34,6 @@ const SwCrypto = {
         return new TextDecoder().decode(pt);
     },
 
-    // Hash a PIN with a salt (for lock-screen verification — never store raw PIN)
     async hashPIN(pin, salt) {
         const data = new TextEncoder().encode(pin + salt);
         const hash = await crypto.subtle.digest('SHA-256', data);
