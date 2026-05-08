@@ -1795,3 +1795,162 @@ select.form-control {
 .btn--danger:hover {
   background: rgba(var(--color-error-rgb), 0.1);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   STOREWISE PATCH — centered responsive layout + danger button
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Delete button */
+.btn--danger {
+    background: transparent;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+.btn--danger:hover {
+    background: rgba(var(--color-error-rgb), 0.1);
+}
+
+/* ── Centered max-width layout ───────────────────────────────────────────── */
+/* The main content area sits to the right of the fixed 280px sidebar.
+   We constrain it so on large screens everything stays readable and centred. */
+
+.main-content {
+    margin-left: 280px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Centre content on wide screens */
+    max-width: calc(100vw - 280px);
+}
+
+/* Inner content sections get a max-width and auto margins so they centre */
+.content-section {
+    display: none;
+    padding: var(--space-24);
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;          /* never wider than this */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Top header stretches full width but caps at same max */
+.top-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--space-16) var(--space-24);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Responsive breakpoints ──────────────────────────────────────────────── */
+@media (max-width: 1280px) {
+    .content-section {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0;
+        max-width: 100vw;
+    }
+    .mobile-menu-btn {
+        display: block;
+    }
+    .header-right .quick-actions {
+        display: none;
+    }
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+    .pos-layout {
+        grid-template-columns: 1fr;
+    }
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+    .chart-card, .stats-card {
+        grid-column: span 1;
+    }
+    .settings-layout {
+        grid-template-columns: 1fr;
+    }
+    .settings-nav {
+        display: flex;
+        overflow-x: auto;
+        gap: var(--space-8);
+    }
+    .settings-nav-item {
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+    .inventory-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-filter {
+        max-width: none;
+    }
+    .inventory-actions {
+        flex-wrap: wrap;
+    }
+    .suppliers-header {
+        flex-direction: column;
+        gap: var(--space-16);
+        align-items: stretch;
+    }
+    .content-section {
+        padding: var(--space-16);
+    }
+}
+
+@media (max-width: 480px) {
+    .top-header {
+        padding: var(--space-12) var(--space-16);
+    }
+    .metrics-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    .inventory-grid {
+        grid-template-columns: 1fr;
+    }
+    .suppliers-grid {
+        grid-template-columns: 1fr;
+    }
+    .performance-metrics {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        width: 95%;
+        margin: var(--space-20);
+    }
+    .payment-methods {
+        flex-direction: column;
+    }
+}
+
+/* ── Sidebar footer buttons ──────────────────────────────────────────────── */
+.sidebar-footer .btn {
+    text-align: center;
+    justify-content: center;
+}
